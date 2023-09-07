@@ -116,8 +116,4 @@ This project is licensed under the [MIT License](LICENSE.md).
 
 ## Support
 
-If you encounter any issues or have questions, please open an issue on this repository or contact [your@email.com].
-
----
-
-Feel free to customize the README further to include additional information specific to your project, such as troubleshooting tips, project structure, or advanced usage instructions. Make sure to keep it well-organized and user-friendly to help others understand and use your project effectively.
+If you encounter any issues or have questions, please open an issue on this repository or contact [E-mail](bninayoub.pro@gmail.com).
