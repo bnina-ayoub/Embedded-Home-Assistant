@@ -36,13 +36,32 @@ If you choose to fine-tune the model, you can achieve even more tailored and spe
 
 
 ## Installation and Setup
+### Firestore Account
+
+To utilize the tables and documents in this project, you will need a Firestore account. Firestore is a NoSQL cloud database by Google Cloud, and it plays a crucial role in managing and storing data for this IoT control system.
+
+Follow these steps to create and set up your Firestore account:
+
+1. **Sign Up for Google Cloud**: If you don't already have a Google Cloud account, you can sign up for one by visiting the [Google Cloud Console](https://console.cloud.google.com/).
+
+2. **Create a New Project**: Once logged in to your Google Cloud account, create a new project from the Google Cloud Console. This project will be associated with your Firestore database.
+
+3. **Enable Firestore**: In your Google Cloud project, navigate to the Firestore section and enable Firestore for your project. You may need to set up billing information as Firestore may have associated costs.
+
+4. **Generate Firestore Credentials**: After enabling Firestore, generate the necessary credentials for your project. These credentials will include a JSON file that contains authentication information.
+
+5. **Replace Placeholder Credentials**: In your project code, locate the Firestore credentials file (typically named `firestorecredentials.json`) and replace it with the credentials file you generated in step 4.
+
+Having a Firestore account is essential for the proper functioning of this IoT control system and allows you to manage data related to lights, windows, and other devices seamlessly.
+
+If you encounter any issues during this setup process or need further assistance, refer to the [Google Cloud Documentation](https://cloud.google.com/firestore/docs) for Firestore or reach out to the Google Cloud support resources.
 
 ### GPT-3 Integration
 
 1. Clone this repository to your local machine.
 
    ```bash
-   git clone https://github.com/bnina-ayoub/J.A.R.V.I.S-Bot-Assistant.git
+   git clone https://github.com/bnina-ayoub/JARVIS-Bot-Assistant-OpenAI-Embedded-ESP32-Solutions.git
    cd your-project
    ```
 
