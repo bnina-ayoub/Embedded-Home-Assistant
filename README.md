@@ -1,6 +1,5 @@
 # JARVIS-Bot-Assistant-OpenAI-Embedded-ESP32-Solutions
 
-![Project Image](path/to/project/image.png)
 
 ## Overview
 
