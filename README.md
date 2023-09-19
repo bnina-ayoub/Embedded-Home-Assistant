@@ -52,9 +52,38 @@ Follow these steps to create and set up your Firestore account:
 
 5. **Replace Placeholder Credentials**: In your project code, locate the Firestore credentials file (typically named `firestorecredentials.json`) and replace it with the credentials file you generated in step 4.
 
-Having a Firestore account is essential for the proper functioning of this IoT control system and allows you to manage data related to lights, windows, and other devices seamlessly.
-
 If you encounter any issues during this setup process or need further assistance, refer to the [Google Cloud Documentation](https://cloud.google.com/firestore/docs) for Firestore or reach out to the Google Cloud support resources.
+
+### Azure Speech Service
+Certainly, to use Azure Speech Service and store the API key in an environment variable, you can follow these steps:
+
+1. **Install the Azure SDK**
+
+   Ensure you have the Azure SDK for Python installed. You can install it using pip:
+
+   ```bash
+   pip install azure-cognitiveservices-speech
+   ```
+
+2. **Store API Key and Region as Environment Variables**
+
+   Set your Azure Speech Service API key and region as environment variables. You can do this in your system's environment variables settings or directly in your Python script using the `os` module.
+
+   ```python
+   import os
+
+   os.environ['SPEECH_KEY'] = 'YOUR_SPEECH_API_KEY'
+   os.environ['SPEECH_REGION'] = 'YOUR_SPEECH_REGION'  # e.g., 'eastus'
+   ```
+
+   Replace `'YOUR_SPEECH_API_KEY'` and `'YOUR_SPEECH_REGION'` with your actual Azure Speech Service API key and region.
+
+3. **Update Your Code**
+
+   Now you can use the `os.environ` dictionary to access these environment variables in your code.
+
+   Make sure to replace `'YOUR_SPEECH_API_KEY'` and `'YOUR_SPEECH_REGION'` with your actual Azure Speech Service API key and region in both the environment variable setting and the code.
+
 
 ### GPT-3 Integration
 
