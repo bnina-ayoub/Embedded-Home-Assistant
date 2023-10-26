@@ -12,8 +12,8 @@
 #include <addons/TokenHelper.h>
 
 /* 1. Define the WiFi credentials */
-#define WIFI_SSID "Ooredoo 4G_39D94B"
-#define WIFI_PASSWORD "18201033"
+#define WIFI_SSID ""
+#define WIFI_PASSWORD ""
 
 /* 2. Define the API Key */
 #define API_KEY ""
