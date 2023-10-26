@@ -16,16 +16,16 @@
 #define WIFI_PASSWORD "18201033"
 
 /* 2. Define the API Key */
-#define API_KEY "AIzaSyAy-h4OBQjRfZBo78gI4WEOvIjAtVlRGm8"
+#define API_KEY ""
 
 /* 3. Define the project ID */
-#define FIREBASE_PROJECT_ID "bootcamp-iot-3f0d2"
+#define FIREBASE_PROJECT_ID ""
 
 /* 4. Define the user Email and password that alreadey registerd or added in your project */
-#define USER_EMAIL "ouba.bnina@gmail.com"
-#define USER_PASSWORD "123456"
-#define APP_MAIN_FIRESTORE_COLLECTION_ID         "Window"
-#define APP_MAIN_FIRESTORE_DOCUMENT_ID           "WDirection"
+#define USER_EMAIL ""
+#define USER_PASSWORD ""
+#define APP_MAIN_FIRESTORE_COLLECTION_ID         ""
+#define APP_MAIN_FIRESTORE_DOCUMENT_ID           ""
 
 // Define Firebase Data object
 FirebaseData fbdo;
@@ -45,10 +45,100 @@ int  Motion = 0;
 WiFiMulti multi;
 #endif
 \
+WebServer server(80);
+const char* host = "esp32";
+const char* loginIndex = 
+  "<form name='loginForm'>"
+    "<table width='20%' bgcolor='A09F9F' align='center'>"
+      "<tr>"
+        "<td colspan=2>"
+          "<center><font size=4><b>ESP32 Login Page</b></font></center>"
+          "<br>"
+        "</td>"
+        "<br>"
+        "<br>"
+      "</tr>"
+      "<td>Username:</td>"
+      "<td><input type='text' size=25 name='userid'><br></td>"
+      "</tr>"
+      "<br>"
+      "<br>"
+      "<tr>"
+        "<td>Password:</td>"
+        "<td><input type='Password' size=25 name='pwd'><br></td>"
+        "<br>"
+        "<br>"
+      "</tr>"
+      "<tr>"
+        "<td><input type='submit' onclick='check(this.form)' value='Login'></td>"
+      "</tr>"
+    "</table>"
+  "</form>"
+  "<script>"
+    "function check(form)"
+    "{"
+    "if(form.userid.value=='admin' && form.pwd.value=='admin')"
+    "{"
+    "window.open('/serverIndex')"
+    "}"
+    "else"
+    "{"
+    " alert('Error Password or Username')/*displays error message*/"
+    "}"
+    "}"
+  "</script>";
+
+
+const char* espInfoPage = 
+  "<div id='prg'>progress: 0%%</div>"
+  "<h1>ESP Info</h1>"
+  "<p>Chip Model: %s</p>"
+  "<p>SDK Version: %s</p>"
+  "<p>CPU Frequency (MHz): %d</p>"
+  "<p>Flash Chip Size (MB): %d</p>";
+
+
+const char* serverIndex = 
+  "<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>"
+      "<form method='POST' action='#' enctype='multipart/form-data' id='upload_form'>"
+        "<input type='file' name='update'>"
+        "<input type='submit' value='Update'>"
+      "</form>"
+      "<form method='GET' action='/espInfoPage'>"
+  "<input type='submit' value='Info'>"
+  "</form>"
+      "<script>"
+        "$('form').submit(function(e){"
+        "e.preventDefault();"
+        "var form = $('#upload_form')[0];"
+        "var data = new FormData(form);"
+        " $.ajax({"
+        "url: '/update',"
+        "type: 'POST',"
+        "data: data,"
+        "contentType: false,"
+        "processData:false,"
+        "xhr: function() {"
+        "var xhr = new window.XMLHttpRequest();"
+        "xhr.upload.addEventListener('progress', function(evt) {"
+        "if (evt.lengthComputable) {"
+        "var per = evt.loaded / evt.total;"
+        "$('#prg').html('progress: ' + Math.round(per*100) + '%');"
+        "}"
+        "}, false);"
+        "return xhr;"
+        "},"
+        "success:function(d, s) {"
+        "console.log('success!')" 
+        "},"
+        "error: function (a, b, c) {"
+        "}"
+        "});"
+        "});"
+  "</script>";
 
 void setup() {
-  // put your setup code here, to run once:
-  Serial.begin(115200);
+Serial.begin(115200);
 pinMode(relay1, OUTPUT);
 pinMode(relay2, OUTPUT);
 pinMode(pir, INPUT);
@@ -74,6 +164,67 @@ pinMode(pir, INPUT);
     Serial.print("Connected with IP: ");
     Serial.println(WiFi.localIP());
     Serial.println();
+
+  if (!MDNS.begin(host)) { // http://esp32.local
+    Serial.println("Error setting up MDNS responder!");
+    while (1) {
+      delay(1000);
+    }
+  }
+  Serial.println("mDNS responder started");
+  char* serverIndexT[1024];
+/*sprintf(serverIndexT, serverIndex,
+  BOARD_TYPE, // Include the board type here
+  ESP.getSdkVersion(),
+  ESP.getCpuFreqMHz(),
+  ESP.getFlashChipSize() / (1024 * 1024)// Include the board type here
+);*/
+  /* Return index page which is stored in serverIndex */
+  server.on("/", HTTP_GET, []() {
+    server.sendHeader("Connection", "close");
+    server.send(200, "text/html", loginIndex);//401 inexistant
+  });
+  server.on("/serverIndex", HTTP_GET, []() {
+    server.sendHeader("Connection", "close");
+    server.send(200, "text/html", serverIndex);
+  });
+  server.on("/espInfoPage", HTTP_GET, []() {
+  String espInfoPage = "<h1>ESP Info</h1>";
+  espInfoPage += "<p>Chip Model: " + String(BOARD_TYPE) + "</p>";
+  espInfoPage += "<p>SDK Version: " + String(ESP.getSdkVersion()) + "</p>";
+  espInfoPage += "<p>CPU Frequency (MHz): " + String(ESP.getCpuFreqMHz()) + "</p>";
+  espInfoPage += "<p>Flash Chip Size (MB): " + String(ESP.getFlashChipSize() / (1024 * 1024)) + "</p>";
+  server.send(200, "text/html", espInfoPage);
+});
+
+  /* Handling uploading firmware file */
+  server.on("/update", HTTP_POST,[]() {
+    server.sendHeader("Connection", "close");
+    server.send(200, "text/plain", (Update.hasError()) ? "FAIL" : "OK");
+    ESP.restart();
+  },[]() {
+    HTTPUpload& upload = server.upload();
+    if (upload.status == UPLOAD_FILE_START) {
+      Serial.printf("Update: %s\n", upload.filename.c_str());
+      if (!Update.begin(UPDATE_SIZE_UNKNOWN)) { // Start with max available size
+        Update.printError(Serial);
+      }
+    } else if (upload.status == UPLOAD_FILE_WRITE) {
+      /* Flashing firmware to ESP */
+      if (Update.write(upload.buf, upload.currentSize) != upload.currentSize) {
+        Update.printError(Serial);
+      }
+    } else if (upload.status == UPLOAD_FILE_END) {
+      if (Update.end(true)) { // True to set the size to the current progress
+        Serial.printf("Update Success: %u\nRebooting...\n", upload.totalSize);
+      } else {
+        Update.printError(Serial);
+      }
+    }
+  });
+
+  server.begin();
+  // put your setup code here, to run once:
 
     Serial.printf("Firebase Client v%s\n\n", FIREBASE_CLIENT_VERSION);
 
@@ -115,6 +266,7 @@ pinMode(pir, INPUT);
 
 void loop() {
   // put your main code here, to run repeatedly:
+  server.handleClient();
    if (Firebase.ready() && (millis() - dataMillis > 20 || dataMillis == 0))
     {
 
