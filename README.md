@@ -1,6 +1,11 @@
 # JARVIS-Bot-Assistant-OpenAI-Embedded-ESP32-Solutions
 
 
+
+https://github.com/bnina-ayoub/Embedded-Home-Assistant/assets/94785911/ada95bb3-01bc-45d4-914c-ad9630b7cc33
+
+
+
 ## Overview
 
 JARVIS is an innovative IoT system that combines voice recognition, speech synthesis, and machine learning capabilities to create a voice-controlled smart home system. This project integrates the GPT-3.5-Turbo-16k language model from OpenAI, Microsoft Azure Speech Recognition, and various hardware components, including an ESP32 microcontroller, relay modules, and a motion sensor. With JARVIS, you can control lights, windows, and other IoT-enabled devices using natural language commands.
