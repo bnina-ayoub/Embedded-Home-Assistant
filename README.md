@@ -31,7 +31,7 @@ JARVIS is an innovative IoT system that combines voice recognition, speech synth
 - Firestore credentials JSON file (not included in this repository)
 - GPT-3 API KEY TXT file (not included in this repository)
 
-## Fine-Tuning Note
+## Prompt Engineering
 
 This project utilizes the power of the GPT-3.5-Turbo-16k model from OpenAI to provide intelligent responses to user queries and commands. It's important to note that the model used in this project was initiated with a conversation prompt to guide its behavior, but it has not undergone manual fine-tuning. Manual fine-tuning is a more in-depth process performed by OpenAI, which allows for customization of the model's behavior.
 
